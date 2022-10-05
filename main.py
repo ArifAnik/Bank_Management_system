@@ -4,7 +4,9 @@ import mysql.connector as mysql
 
 user_admin = "admin"
 password_admin = "admin"
-userid = "1"
+G_userid = ""
+G_amount = ""
+G_name = ""
 
 
 def insert():
@@ -93,7 +95,7 @@ def user_update():
                             password="anik1234", database="test")
         cursor = con.cursor()
         cursor.execute("update bankdata set password='"+password +
-                       "',phone='"+phone + "' where id='"+userid+"'")
+                       "',phone='"+phone + "' where id='"+G_userid+"'")
         cursor.execute("commit")
 
         upg2_e_pass.delete(0, 'end')
@@ -141,16 +143,15 @@ def pg2_show():
 def admin_check():
     pw = pg1_entry2.get()
     usr = pg1_entry.get()
+    pg1_entry.delete(0, 'end')
+    pg1_entry2.delete(0, 'end')
     if (usr != user_admin):
         MessageBox.showinfo("Login Status", "Invalid Username!")
-        pg1_entry.delete(0, 'end')
-        pg1_entry2.delete(0, 'end')
-    elif (pw != password_admin):
-        MessageBox.showinfo("Login Status", "Invalid Password!")
-        pg1_entry.delete(0, 'end')
-        pg1_entry2.delete(0, 'end')
     else:
-        show_frame(admin_page_2)
+        if (pw != password_admin):
+            MessageBox.showinfo("Login Status", "Invalid Password!")
+        else:
+            show_frame(admin_page_2)
 
 
 def user_check():
@@ -163,6 +164,7 @@ def user_check():
     rows = cursor.fetchall()
     idfound = False
     password_user = ""
+    local_amount = ""
     upg1_entry.delete(0, 'end')
     upg1_entry2.delete(0, 'end')
 
@@ -170,7 +172,23 @@ def user_check():
         if (userid == str(row[0])):
             idfound = True
             password_user = row[3]
+            global G_userid
+            G_userid = str(row[0])
+            global G_amount
+            G_amount = str(row[4])
+            global G_name
+            G_name = row[1]
 
+        insertName = "Welcome, " + G_name + "       "
+    upg2_welcome = Label(
+        user_page_2, text=insertName, font=('bold', 15))
+    upg2_welcome.place(x=20, y=20)
+    upg2_amount1 = Label(
+        user_page_2, text="Your Current Amount:", font=('bold', 15))
+    upg2_amount1.place(x=350, y=90)
+    upg2_amount2 = Label(
+        user_page_2, text=G_amount + "   ", font=('bold', 20))
+    upg2_amount2.place(x=400, y=120)
     if (idfound != True):
         MessageBox.showinfo("Login Status", "Invalid ID!")
     else:
@@ -181,29 +199,16 @@ def user_check():
 
 
 def upg2_show():
-    con = mysql.connect(host="localhost", user="root",
-                        password="anik1234", database="test")
-    cursor = con.cursor()
-    cursor.execute("select * from bankdata")
-    rows = cursor.fetchall()
-    # upg2_list.delete(0,upg2_list.size())
-
-    for row in rows:
-        if (userid == str(row[0])):
-            # insertData = 'Phone:'+ row[2] + '  Password:'+ row[3] + '  Amount:'+ str(row[4])
-            # upg2_list.insert(upg2_list.size()+1, insertData)
-            insertName = "Welcome, " + row[1]
-            upg2_welcome = Label(
-                user_page_2, text=insertName, font=('bold', 15))
-            upg2_welcome.place(x=20, y=20)
-            upg2_amount1 = Label(
-                user_page_2, text="Your Current Amount:", font=('bold', 15))
-            upg2_amount1.place(x=350, y=90)
-            upg2_amount2 = Label(
-                user_page_2, text=str(row[4]), font=('bold', 20))
-            upg2_amount2.place(x=400, y=120)
-
-    con.close()
+    insertName = "Welcome, " + G_name + "       "
+    upg2_welcome = Label(
+        user_page_2, text=insertName, font=('bold', 15))
+    upg2_welcome.place(x=20, y=20)
+    upg2_amount1 = Label(
+        user_page_2, text="Your Current Amount:", font=('bold', 15))
+    upg2_amount1.place(x=350, y=90)
+    upg2_amount2 = Label(
+        user_page_2, text=G_amount + "    ", font=('bold', 20))
+    upg2_amount2.place(x=400, y=120)
 
 
 root = Tk()
