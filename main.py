@@ -40,6 +40,28 @@ def insert():
         con.close()
 
 
+def admin_insert():
+    name = apg1_entry.get()
+    password = apg1_entry2.get()
+
+    if (name == "" or password == ""):
+        MessageBox.showinfo("Insert Status", "All fields are required")
+    else:
+        con = mysql.connect(host="localhost", user="root",
+                            password="anik1234", database="test")
+        cursor = con.cursor()
+        cursor.execute("insert into admin values('" +
+                       name+"','"+password+"')")
+        cursor.execute("commit")
+
+        apg1_entry.delete(0, 'end')
+        apg1_entry2.delete(0, 'end')
+
+        pg2_show()
+        MessageBox.showinfo("Insert Status", "Inserted Successfully")
+        con.close()
+
+
 def delete():
     id = pg2_e_id.get()
     if (id == ""):
@@ -149,15 +171,43 @@ def pg2_show():
     con.close()
 
 
+# def admin_check():
+#     pw = pg1_entry2.get()
+#     usr = pg1_entry.get()
+#     pg1_entry.delete(0, 'end')
+#     pg1_entry2.delete(0, 'end')
+#     if (usr != user_admin):
+#         MessageBox.showinfo("Login Status", "Invalid Username!")
+#     else:
+#         if (pw != password_admin):
+#             MessageBox.showinfo("Login Status", "Invalid Password!")
+#         else:
+#             show_frame(admin_page_2)
+
+
 def admin_check():
     pw = pg1_entry2.get()
     usr = pg1_entry.get()
     pg1_entry.delete(0, 'end')
     pg1_entry2.delete(0, 'end')
-    if (usr != user_admin):
-        MessageBox.showinfo("Login Status", "Invalid Username!")
+    con = mysql.connect(host="localhost", user="root",
+                        password="anik1234", database="test")
+    cursor = con.cursor()
+    cursor.execute("select * from admin")
+    rows = cursor.fetchall()
+    idfound = False
+    password_admin = ""
+    local_amount = ""
+
+    for row in rows:
+        if (usr == str(row[0])):
+            idfound = True
+            password_user = row[1]
+
+    if (idfound != True):
+        MessageBox.showinfo("Login Status", "Invalid ID!")
     else:
-        if (pw != password_admin):
+        if (pw != password_user):
             MessageBox.showinfo("Login Status", "Invalid Password!")
         else:
             show_frame(admin_page_2)
@@ -233,9 +283,10 @@ admin_page_1 = Frame(root)
 admin_page_2 = Frame(root)
 user_page_1 = Frame(root)
 user_page_2 = Frame(root)
+c_admin_page = Frame(root)
 
 
-for frame in (page0, admin_page_1, admin_page_2, user_page_1, user_page_2):
+for frame in (page0, admin_page_1, admin_page_2, user_page_1, user_page_2, c_admin_page):
     frame.grid(row=0, column=0, sticky='nsew')
 
 
@@ -267,9 +318,56 @@ pg1_label2.place(x=50, y=150)
 pg1_entry2 = Entry(admin_page_1)
 pg1_entry2.place(x=170, y=155)
 
+# pg1_label = Label(admin_page_1, text='Username', font=('Arial', 15, 'bold'))
+# pg1_label.place(x=300, y=100)
+
+# pg1_entry = Entry(admin_page_1)
+# pg1_entry.place(x=420, y=106)
+
+# pg1_label3 = Label(admin_page_1, text='Password', font=('Arial', 15, 'bold'))
+# pg1_label3.place(x=300, y=150)
+
+# pg1_entry2 = Entry(admin_page_1)
+# pg1_entry2.place(x=420, y=155)
+
 pg1_button = Button(admin_page_1, text='LOGIN', font=(
     'Arial', 13, 'bold'), command=admin_check)
 pg1_button.place(x=170, y=200)
+
+# -------------- create admin page --------------------------------
+apg1_label = Label(c_admin_page, text='Username', font=('Arial', 15, 'bold'))
+apg1_label.place(x=50, y=100)
+
+apg1_entry = Entry(c_admin_page)
+apg1_entry.place(x=170, y=106)
+
+apg1_label2 = Label(c_admin_page, text='Password', font=('Arial', 15, 'bold'))
+apg1_label2.place(x=50, y=150)
+
+apg1_entry2 = Entry(c_admin_page)
+apg1_entry2.place(x=170, y=155)
+
+apg2_list = Listbox(c_admin_page, width=70)
+apg2_list.place(x=350, y=60)
+
+apg1_button = Button(c_admin_page, text='Create', font=(
+    'Arial', 13, 'bold'), command=admin_insert)
+apg1_button.place(x=170, y=200)
+
+# apg2_show()
+
+# pg1_label = Label(admin_page_1, text='Username', font=('Arial', 15, 'bold'))
+# pg1_label.place(x=300, y=100)
+
+# pg1_entry = Entry(admin_page_1)
+# pg1_entry.place(x=420, y=106)
+
+# pg1_label3 = Label(admin_page_1, text='Password', font=('Arial', 15, 'bold'))
+# pg1_label3.place(x=300, y=150)
+
+# pg1_entry2 = Entry(admin_page_1)
+# pg1_entry2.place(x=420, y=155)
+
 
 # ============= user login page =========
 upg1_label = Label(user_page_1, text='ID', font=('Arial', 15, 'bold'))
@@ -340,6 +438,10 @@ pg2_update.place(x=130, y=300)
 pg2_get = Button(admin_page_2, text='Get', font=(
     "italic", 10), bg="white", command=get)
 pg2_get.place(x=190, y=300)
+
+pg2_get = Button(admin_page_2, text='Create a new admin', font=(
+    "italic", 10), bg="white", command=lambda: show_frame(c_admin_page))
+pg2_get.place(x=600, y=300)
 
 pg2_logout = Button(admin_page_2, text='Logout', font=(
     "italic", 10), bg="white", command=lambda: show_frame(page0))
