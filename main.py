@@ -2,8 +2,8 @@ from tkinter import *
 import tkinter.messagebox as MessageBox
 import mysql.connector as mysql
 
-user_admin = "admin"
-password_admin = "admin"
+user_admin = "a"
+password_admin = "a"
 G_userid = ""
 G_amount = ""
 G_address = ""
@@ -321,25 +321,25 @@ pg2_e_amount.place(x=150, y=180)
 
 pg2_insert = Button(admin_page_2, text='Insert', font=(
     "italic", 10), bg="white", command=insert)
-pg2_insert.place(x=20, y=200)
+pg2_insert.place(x=20, y=300)
 
 pg2_delete = Button(admin_page_2, text='Delete', font=(
     "italic", 10), bg="white", command=delete)
-pg2_delete.place(x=70, y=200)
+pg2_delete.place(x=70, y=300)
 
 pg2_update = Button(admin_page_2, text='Update', font=(
     "italic", 10), bg="white", command=update)
-pg2_update.place(x=130, y=200)
+pg2_update.place(x=130, y=300)
 
 pg2_get = Button(admin_page_2, text='Get', font=(
     "italic", 10), bg="white", command=get)
-pg2_get.place(x=190, y=200)
+pg2_get.place(x=190, y=300)
 
 pg2_logout = Button(admin_page_2, text='Logout', font=(
     "italic", 10), bg="white", command=lambda: show_frame(page0))
-pg2_logout.place(x=500, y=10)
+pg2_logout.place(x=800, y=10)
 
-pg2_list = Listbox(admin_page_2, width=48)
+pg2_list = Listbox(admin_page_2, width=90)
 pg2_list.place(x=290, y=60)
 pg2_show()
 
