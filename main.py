@@ -6,6 +6,8 @@ user_admin = "admin"
 password_admin = "admin"
 G_userid = ""
 G_amount = ""
+G_address = ""
+G_phone = ""
 G_name = ""
 
 
@@ -15,6 +17,7 @@ def insert():
     phone = pg2_e_phone.get()
     password = pg2_e_pass.get()
     amount = pg2_e_amount.get()
+    # address = pg2_e_address.get()
 
     if (id == "" or name == "" or phone == ""):
         MessageBox.showinfo("Insert Status", "All fields are required")
@@ -212,7 +215,7 @@ def upg2_show():
 
 
 root = Tk()
-root.geometry("600x300")
+root.geometry("900x400")
 root.title("Bank Management Project")
 root.rowconfigure(0, weight=1)
 root.columnconfigure(0, weight=1)
@@ -289,11 +292,14 @@ pg2_name.place(x=20, y=60)
 pg2_phone = Label(admin_page_2, text='Enter Phone', font=('bold', 10))
 pg2_phone.place(x=20, y=90)
 
+pg2_address = Label(admin_page_2, text='Enter Address', font=('bold', 10))
+pg2_address.place(x=20, y=120)
+
 pg2_pass = Label(admin_page_2, text='Enter Password', font=('bold', 10))
-pg2_pass.place(x=20, y=120)
+pg2_pass.place(x=20, y=150)
 
 pg2_amount = Label(admin_page_2, text='Enter Amount', font=('bold', 10))
-pg2_amount.place(x=20, y=150)
+pg2_amount.place(x=20, y=180)
 
 pg2_e_id = Entry(admin_page_2)
 pg2_e_id.place(x=150, y=30)
@@ -304,11 +310,14 @@ pg2_e_name.place(x=150, y=60)
 pg2_e_phone = Entry(admin_page_2)
 pg2_e_phone.place(x=150, y=90)
 
+pg2_e_address = Entry(admin_page_2)
+pg2_e_address.place(x=150, y=120)
+
 pg2_e_pass = Entry(admin_page_2)
-pg2_e_pass.place(x=150, y=120)
+pg2_e_pass.place(x=150, y=150)
 
 pg2_e_amount = Entry(admin_page_2)
-pg2_e_amount.place(x=150, y=150)
+pg2_e_amount.place(x=150, y=180)
 
 pg2_insert = Button(admin_page_2, text='Insert', font=(
     "italic", 10), bg="white", command=insert)
