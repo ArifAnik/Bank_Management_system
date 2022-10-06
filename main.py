@@ -371,6 +371,10 @@ apg1_button = Button(c_admin_page, text='Create', font=(
     'Arial', 13, 'bold'), command=admin_insert)
 apg1_button.place(x=170, y=200)
 
+apg2_button = Button(c_admin_page, text='Back', font=(
+    'Arial', 13, 'bold'), command=lambda: show_frame(admin_page_2))
+apg2_button.place(x=750, y=350)
+
 apg2_show()
 
 # pg1_label = Label(admin_page_1, text='Username', font=('Arial', 15, 'bold'))
