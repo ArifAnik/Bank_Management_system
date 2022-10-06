@@ -17,16 +17,16 @@ def insert():
     phone = pg2_e_phone.get()
     password = pg2_e_pass.get()
     amount = pg2_e_amount.get()
-    # address = pg2_e_address.get()
+    address = pg2_e_address.get()
 
-    if (id == "" or name == "" or phone == ""):
+    if (id == "" or name == "" or phone == "" or password == "" or amount == "" or address == ""):
         MessageBox.showinfo("Insert Status", "All fields are required")
     else:
         con = mysql.connect(host="localhost", user="root",
                             password="anik1234", database="test")
         cursor = con.cursor()
         cursor.execute("insert into bankdata values('"+id+"','" +
-                       name+"','"+phone+"','"+password+"','"+amount+"')")
+                       name+"','"+phone+"','"+password+"','"+amount+"','"+address+"')")
         cursor.execute("commit")
 
         pg2_e_id.delete(0, 'end')
@@ -34,6 +34,7 @@ def insert():
         pg2_e_phone.delete(0, 'end')
         pg2_e_pass.delete(0, 'end')
         pg2_e_amount.delete(0, 'end')
+        pg2_e_address.delete(0, 'end')
         pg2_show()
         MessageBox.showinfo("Insert Status", "Inserted Successfully")
         con.close()
@@ -55,6 +56,7 @@ def delete():
         pg2_e_phone.delete(0, 'end')
         pg2_e_pass.delete(0, 'end')
         pg2_e_amount.delete(0, 'end')
+        pg2_e_address.delete(0, 'end')
         pg2_show()
         MessageBox.showinfo("Delete Status", "Deleted Successfully")
         con.close()
@@ -65,6 +67,7 @@ def update():
     name = pg2_e_name.get()
     phone = pg2_e_phone.get()
     amount = pg2_e_amount.get()
+    address = pg2_e_address.get()
 
     if (id == "" or name == "" or phone == "" or amount == ""):
         MessageBox.showinfo(
@@ -74,7 +77,7 @@ def update():
                             password="anik1234", database="test")
         cursor = con.cursor()
         cursor.execute("update bankdata set name='"+name+"',phone='" +
-                       phone + "',amount='"+amount + "' where id='"+id+"'")
+                       phone + "',amount='"+amount + "',address='"+address + "' where id='"+id+"'")
         cursor.execute("commit")
 
         pg2_e_id.delete(0, 'end')
@@ -82,6 +85,7 @@ def update():
         pg2_e_phone.delete(0, 'end')
         pg2_e_pass.delete(0, 'end')
         pg2_e_amount.delete(0, 'end')
+        pg2_e_address.delete(0, 'end')
         pg2_show()
         MessageBox.showinfo("Update Status", "Updated Successfully")
         con.close()
@@ -123,6 +127,7 @@ def get():
             pg2_e_name.insert(0, row[1])
             pg2_e_phone.insert(0, row[2])
             pg2_e_amount.insert(0, row[4])
+            pg2_e_address.insert(0, row[5])
 
         con.close()
 
@@ -137,7 +142,8 @@ def pg2_show():
 
     for row in rows:
         insertData = 'ID:' + str(row[0]) + '  Name:' + row[1] + \
-            '  Phone:' + row[2] + '  Amount:' + str(row[4])
+            '  Phone:' + row[2] + '  Amount:' + \
+            str(row[4]) + '  Address:' + str(row[5])
         pg2_list.insert(pg2_list.size()+1, insertData)
 
     con.close()
