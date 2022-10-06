@@ -116,21 +116,77 @@ def update():
 def user_update():
     phone = upg2_e_phone.get()
     password = upg2_e_pass.get()
+    address = upg2_e_address.get()
 
-    if (phone == "" or password == ""):
+    if (phone == "" or password == "" or address == ""):
         MessageBox.showinfo("Update Status", "All fields are required")
     else:
         con = mysql.connect(host="localhost", user="root",
                             password="anik1234", database="test")
         cursor = con.cursor()
         cursor.execute("update bankdata set password='"+password +
-                       "',phone='"+phone + "' where id='"+G_userid+"'")
+                       "',phone='"+phone + "',address='"+address + "' where id='"+G_userid+"'")
         cursor.execute("commit")
 
         upg2_e_pass.delete(0, 'end')
         upg2_e_phone.delete(0, 'end')
+        upg2_e_address.delete(0, 'end')
         upg2_show()
         MessageBox.showinfo("Update Status", "Updated Successfully")
+        con.close()
+
+
+def user_withdraw():
+    wd = upg2_e_trans.get()
+    dpo = "0"
+
+    if (wd == ""):
+        MessageBox.showinfo("Update Status", "No amount written to withdraw")
+    else:
+        con = mysql.connect(host="localhost", user="root",
+                            password="anik1234", database="test")
+        cursor = con.cursor()
+        cursor.execute("insert into transactions values('" +
+                       G_userid+"','"+wd+"','"+dpo+"')")
+        cursor.execute("commit")
+
+        upg2_e_trans.delete(0, 'end')
+        global G_amount
+        tmp = int(G_amount) - int(wd)
+        G_amount = str(tmp)
+        cursor.execute("update bankdata set amount='" +
+                       G_amount + "' where id='"+G_userid+"'")
+        cursor.execute("commit")
+
+        upg2_show()
+        MessageBox.showinfo("Update Status", "Withdrawn Successfully")
+        con.close()
+
+
+def user_deposit():
+    dpo = upg2_e_trans.get()
+    wd = "0"
+
+    if (dpo == ""):
+        MessageBox.showinfo("Update Status", "No amount written to deposit")
+    else:
+        con = mysql.connect(host="localhost", user="root",
+                            password="anik1234", database="test")
+        cursor = con.cursor()
+        cursor.execute("insert into transactions values('" +
+                       G_userid+"','"+wd+"','"+dpo+"')")
+        cursor.execute("commit")
+
+        upg2_e_trans.delete(0, 'end')
+        global G_amount
+        tmp = int(G_amount) + int(dpo)
+        G_amount = str(tmp)
+        cursor.execute("update bankdata set amount='" +
+                       G_amount + "' where id='"+G_userid+"'")
+        cursor.execute("commit")
+
+        upg2_show()
+        MessageBox.showinfo("Update Status", "deposited Successfully")
         con.close()
 
 
@@ -229,6 +285,8 @@ def admin_check():
         else:
             show_frame(admin_page_2)
 
+    con.close()
+
 
 def user_check():
     pw = upg1_entry2.get()
@@ -261,10 +319,10 @@ def user_check():
     upg2_welcome.place(x=20, y=20)
     upg2_amount1 = Label(
         user_page_2, text="Your Current Amount:", font=('bold', 15))
-    upg2_amount1.place(x=350, y=90)
+    upg2_amount1.place(x=600, y=90)
     upg2_amount2 = Label(
         user_page_2, text=G_amount + "   ", font=('bold', 20))
-    upg2_amount2.place(x=400, y=120)
+    upg2_amount2.place(x=650, y=120)
     if (idfound != True):
         MessageBox.showinfo("Login Status", "Invalid ID!")
     else:
@@ -272,6 +330,8 @@ def user_check():
             MessageBox.showinfo("Login Status", "Invalid Password!")
         else:
             show_frame(user_page_2)
+
+    con.close()
 
 
 def upg2_show():
@@ -281,10 +341,10 @@ def upg2_show():
     upg2_welcome.place(x=20, y=20)
     upg2_amount1 = Label(
         user_page_2, text="Your Current Amount:", font=('bold', 15))
-    upg2_amount1.place(x=350, y=90)
+    upg2_amount1.place(x=600, y=90)
     upg2_amount2 = Label(
         user_page_2, text=G_amount + "    ", font=('bold', 20))
-    upg2_amount2.place(x=400, y=120)
+    upg2_amount2.place(x=650, y=120)
 
 
 root = Tk()
@@ -480,8 +540,14 @@ upg2_phone.place(x=20, y=140)
 upg2_pass = Label(user_page_2, text='Enter Password', font=('bold', 10))
 upg2_pass.place(x=20, y=170)
 
+upg2_address = Label(user_page_2, text='Enter Address', font=('bold', 10))
+upg2_address.place(x=20, y=200)
+
+upg2_witdepo = Label(user_page_2, text='Withdraw/deposit', font=('bold', 10))
+upg2_witdepo.place(x=470, y=200)
+
 upg2_toup = Label(
-    user_page_2, text='To update your password and phone number:', font=('bold', 10))
+    user_page_2, text='To update your password, address and phone number:', font=('bold', 10))
 upg2_toup.place(x=20, y=110)
 
 upg2_e_phone = Entry(user_page_2)
@@ -490,14 +556,27 @@ upg2_e_phone.place(x=150, y=140)
 upg2_e_pass = Entry(user_page_2)
 upg2_e_pass.place(x=150, y=170)
 
+upg2_e_address = Entry(user_page_2)
+upg2_e_address.place(x=150, y=200)
+
+upg2_e_trans = Entry(user_page_2)
+upg2_e_trans.place(x=600, y=200)
 
 upg2_update = Button(user_page_2, text='Update', font=(
     "italic", 10), bg="white", command=user_update)
-upg2_update.place(x=130, y=200)
+upg2_update.place(x=130, y=300)
+
+upg2_withdraw = Button(user_page_2, text='Withdraw', font=(
+    "italic", 10), bg="white", command=user_withdraw)
+upg2_withdraw.place(x=600, y=230)
+
+upg2_deposit = Button(user_page_2, text='Deposit', font=(
+    "italic", 10), bg="white", command=user_deposit)
+upg2_deposit.place(x=670, y=230)
 
 upg2_logout = Button(user_page_2, text='Logout', font=(
     "italic", 10), bg="white", command=lambda: show_frame(page0))
-upg2_logout.place(x=500, y=10)
+upg2_logout.place(x=750, y=10)
 
 # upg2_list = Listbox(user_page_2, width = 48)
 # upg2_list.place(x=290, y=30)
