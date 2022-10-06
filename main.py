@@ -57,7 +57,7 @@ def admin_insert():
         apg1_entry.delete(0, 'end')
         apg1_entry2.delete(0, 'end')
 
-        pg2_show()
+        apg2_show()
         MessageBox.showinfo("Insert Status", "Inserted Successfully")
         con.close()
 
@@ -167,6 +167,23 @@ def pg2_show():
             '  Phone:' + row[2] + '  Amount:' + \
             str(row[4]) + '  Address:' + str(row[5])
         pg2_list.insert(pg2_list.size()+1, insertData)
+
+    con.close()
+
+
+def apg2_show():
+    con = mysql.connect(host="localhost", user="root",
+                        password="anik1234", database="test")
+    cursor = con.cursor()
+    cursor.execute("select * from admin")
+    rows = cursor.fetchall()
+    apg2_list.delete(0, apg2_list.size())
+    cnt = 1
+
+    for row in rows:
+        insertData = str(cnt) + ': ' + row[0]
+        apg2_list.insert(apg2_list.size()+1, insertData)
+        cnt = cnt+1
 
     con.close()
 
@@ -354,7 +371,7 @@ apg1_button = Button(c_admin_page, text='Create', font=(
     'Arial', 13, 'bold'), command=admin_insert)
 apg1_button.place(x=170, y=200)
 
-# apg2_show()
+apg2_show()
 
 # pg1_label = Label(admin_page_1, text='Username', font=('Arial', 15, 'bold'))
 # pg1_label.place(x=300, y=100)
