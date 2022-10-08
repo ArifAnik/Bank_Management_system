@@ -375,11 +375,11 @@ show_frame(page0)
 
 pg0_button = Button(page0, text='USER', font=(
     'Arial', 20, 'bold'), command=lambda: show_frame(user_page_1))
-pg0_button.place(x=100, y=90)
+pg0_button.place(x=401, y=120)
 
 pg0_button = Button(page0, text='ADMIN', font=(
     'Arial', 20, 'bold'), command=lambda: show_frame(admin_page_1))
-pg0_button.place(x=350, y=90)
+pg0_button.place(x=395, y=200)
 
 
 # ============= admin login page =========
@@ -410,6 +410,11 @@ pg1_entry2.place(x=170, y=155)
 pg1_button = Button(admin_page_1, text='LOGIN', font=(
     'Arial', 13, 'bold'), command=admin_check)
 pg1_button.place(x=170, y=200)
+
+pg2_button = Button(admin_page_1, text='Back', font=(
+    'Arial', 13, 'bold'), command=lambda: show_frame(page0))
+pg2_button.place(x=750, y=350)
+
 
 # -------------- create admin page --------------------------------
 apg1_label = Label(c_admin_page, text='Username', font=('Arial', 15, 'bold'))
@@ -466,6 +471,10 @@ upg1_entry2.place(x=170, y=155)
 upg1_button = Button(user_page_1, text='LOGIN', font=(
     'Arial', 13, 'bold'), command=user_check)
 upg1_button.place(x=170, y=200)
+
+upg2_button = Button(user_page_1, text='Back', font=(
+    'Arial', 13, 'bold'), command=lambda: show_frame(page0))
+upg2_button.place(x=750, y=350)
 
 # ============= admin Page 2 =========
 pg2_id = Label(admin_page_2, text='Enter ID', font=('bold', 10))
